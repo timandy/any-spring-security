@@ -7,12 +7,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AnyUserDetailsService anyUserDetailsService;
 
     @Autowired
-    public void setAnyUserDetailsService(AnyUserDetailsService anyUserDetailsService){
+    public void setAnyUserDetailsService(AnyUserDetailsService anyUserDetailsService) {
         this.anyUserDetailsService = anyUserDetailsService;
     }
 
@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/user/**", "/print").hasRole("USER")
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/user")
                 .and()
@@ -39,7 +39,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
      * 添加 UserDetailsService， 实现自定义登录校验
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder builder) throws Exception{
-        builder.userDetailsService(anyUserDetailsService);
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+//        //数据库验证
+//        builder.userDetailsService(anyUserDetailsService);
+
+        //内存验证
+        builder
+                .inMemoryAuthentication()
+                .withUser("user").password("123").roles("USER");
     }
 }
