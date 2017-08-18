@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PrintController {
     @GetMapping("/print")
     public String print(String value) {
-        System.out.print(value);
+        System.out.println(value);
         return value;
     }
 }
