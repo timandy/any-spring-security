@@ -9,12 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private AnyUserDetailsService anyUserDetailsService;
-
     @Autowired
-    public void setAnyUserDetailsService(AnyUserDetailsService anyUserDetailsService) {
-        this.anyUserDetailsService = anyUserDetailsService;
-    }
+    private AnyUserDetailsService anyUserDetailsService;
 
     /**
      * 匹配 "/" 路径，不需要权限即可访问
@@ -27,12 +23,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/user/**", "/print").hasRole("USER")
+                .antMatchers("/").permitAll()//开放资源
+                .antMatchers("/user/**", "/print").hasRole("USER")//限制资源
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/user")
+                .formLogin().loginPage("/login").defaultSuccessUrl("/user")//登录页
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/login")//登出页
+                .and()
+                .csrf().disable();//禁止跨站攻击
     }
 
     /**
