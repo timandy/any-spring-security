@@ -53,13 +53,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     //constructor
     public LoginSuccessHandler(String defaultSuccessUrl) {
-        this(defaultSuccessUrl, false);
-    }
-
-    //constructor
-    public LoginSuccessHandler(String defaultSuccessUrl, boolean alwaysUse) {
         this.setDefaultTargetUrl(defaultSuccessUrl);
-        this.setAlwaysUseDefaultTargetUrl(alwaysUse);
+        this.setAlwaysUseDefaultTargetUrl(true);
     }
 
     //onSuccess
