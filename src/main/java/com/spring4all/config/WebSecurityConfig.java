@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private AnyUserDetailsService anyUserDetailsService;
 
@@ -26,7 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()//开放资源
                 .antMatchers("/user/**", "/print").hasRole("USER")//限制资源
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/user")//登录页
+                .formLogin().loginPage("/login")//登录页
+                .successHandler(new LoginSuccessHandler("/user").setSuccessString("{\"head\":{\"retFlag\":\"00000\",\"retMsg\":\"登录成功！\"}}"))//登录成功
+                .failureHandler(new LoginFailureHandler().setFailureString("{\"head\":{\"retFlag\":\"00001\",\"retMsg\":\"用户名或密码错误！\"}}"))//登录失败
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/login")//登出页
                 .and()
