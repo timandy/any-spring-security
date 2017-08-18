@@ -24,10 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()//开放资源
                 .antMatchers("/user/**", "/print").hasRole("USER")//限制资源
+                .antMatchers("/admin").hasRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/login")//登录页
-                .successHandler(new LoginSuccessHandler("/user").setSuccessString("{\"head\":{\"retFlag\":\"00000\",\"retMsg\":\"登录成功！\"}}"))//登录成功
-                .failureHandler(new LoginFailureHandler().setFailureString("{\"head\":{\"retFlag\":\"00001\",\"retMsg\":\"用户名或密码错误！\"}}"))//登录失败
+                .successHandler(new LoginSuccessHandler().setSuccessString("{\"head\":{\"retFlag\":\"00000\",\"retMsg\":\"登录成功！\"}}"))//登录成功
+                .failureHandler(new LoginFailureHandler().setFailureString("{\"head\":{\"retFlag\":\"00001\",\"retMsg\":\"用户名或密码错误！\"}}").setLockedString("{\"head\":{\"retFlag\":\"00002\",\"retMsg\":\"用户已被冻结！\"}}"))//登录失败
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/login")//登出页
                 .and()
@@ -45,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //内存验证
         builder
                 .inMemoryAuthentication()
+                .withUser("admin").password("111").roles("USER").accountLocked(true)
+                .and()
                 .withUser("user").password("123").roles("USER");
     }
 }

@@ -2,6 +2,7 @@ package com.spring4all.config;
 
 import com.spring4all.io.CharsetNames;
 import com.spring4all.io.StreamWriter;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -16,6 +17,7 @@ import java.io.Writer;
  */
 public class LoginFailureHandler implements AuthenticationFailureHandler {
     private String failureString = "failure";
+    private String lockedString = "locked";
 
     //region property
 
@@ -28,6 +30,15 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         return this;
     }
 
+    public String getLockedString() {
+        return this.lockedString;
+    }
+
+    public LoginFailureHandler setLockedString(String lockedString) {
+        this.lockedString = lockedString;
+        return this;
+    }
+
     //endregion
 
     //constructor
@@ -37,8 +48,14 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     //onFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        try (Writer writer = new StreamWriter(response.getOutputStream(), CharsetNames.UTF_8)) {
-            writer.write(this.failureString);
+        if (e instanceof LockedException) {
+            try (Writer writer = new StreamWriter(response.getOutputStream(), CharsetNames.UTF_8)) {
+                writer.write(this.lockedString);
+            }
+        } else {
+            try (Writer writer = new StreamWriter(response.getOutputStream(), CharsetNames.UTF_8)) {
+                writer.write(this.failureString);
+            }
         }
     }
 }
