@@ -21,8 +21,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory() // 使用in-memory存储
-                .withClient("client") // client_id
-                .secret("secret") // client_secret
+                .withClient("android") // client_id
+                .secret("pas") // client_secret
                 .authorizedGrantTypes("authorization_code") // 该client允许的授权类型
                 .scopes("app"); // 允许的授权范围
     }
