@@ -1,7 +1,7 @@
-package com.spring4all.config;
+package com.bestvike.config.handler;
 
-import com.spring4all.io.CharsetNames;
-import com.spring4all.io.StreamWriter;
+import com.bestvike.io.CharsetNames;
+import com.bestvike.io.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;

@@ -1,15 +1,31 @@
-package com.spring4all.config;
+package com.bestvike.config;
 
+import com.bestvike.config.handler.LoginFailureHandler;
+import com.bestvike.config.handler.LoginSuccessHandler;
+import com.bestvike.config.service.DomainUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
+@Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private AnyUserDetailsService anyUserDetailsService;
+    private DomainUserDetailService userDetailService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
     /**
      * 匹配 "/" 路径，不需要权限即可访问
@@ -21,9 +37,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()//开放资源
-                .antMatchers("/user/**", "/print").hasRole("USER")//限制资源
+                .antMatchers("/user/*", "/print").authenticated()//限制资源
                 .antMatchers("/admin").hasRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/login")//登录页
@@ -32,7 +49,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/login")//登出页
                 .and()
-                .csrf().disable();//禁止跨站攻击
+                .httpBasic();//禁止跨站攻击
     }
 
     /**
@@ -40,14 +57,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-//        //数据库验证
-//        builder.userDetailsService(anyUserDetailsService);
-
-        //内存验证
         builder
-                .inMemoryAuthentication()
-                .withUser("admin").password("111").roles("USER").accountLocked(true)
-                .and()
-                .withUser("user").password("123").roles("USER");
+                .userDetailsService(this.userDetailService)
+                .passwordEncoder(this.passwordEncoder);
     }
+
 }

@@ -1,21 +1,20 @@
-package com.spring4all.controller;
+package com.bestvike.controller;
 
-import com.spring4all.entity.UserEntity;
-import com.spring4all.service.UserService;
-import lombok.AllArgsConstructor;
+import com.bestvike.config.service.DomainUserDetailService;
+import com.bestvike.entity.UserInfo;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
-@AllArgsConstructor
 public class HomeController {
-
-    private final UserService userService;
-
     @GetMapping({"/", "/index", "/home"})
     public String root() {
         return "index";
@@ -35,11 +34,16 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    public String doRegister(UserEntity userEntity) {
+    public String doRegister(UserInfo userInfo) {
         // 此处省略校验逻辑
-        if (userService.insert(userEntity))
+        if (DomainUserDetailService.insert(userInfo))
             return "redirect:register?success";
         return "redirect:register?error";
     }
 
+    @GetMapping("/user")
+    public String user(@AuthenticationPrincipal Principal principal, Model model) {
+        model.addAttribute("username", principal.getName());
+        return "user/user";
+    }
 }

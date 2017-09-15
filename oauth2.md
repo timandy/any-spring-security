@@ -32,7 +32,7 @@ approve
 - code 为上一步返回的 code
 - 访问以下地址返回 access_token
 ```
-http://localhost:8080/oauth/token2?client_id=android&client_secret=pas&grant_type=authorization_code&redirect_uri=http://www.baidu.com&code=${code}
+http://localhost:8080/oauth/token?client_id=android&client_secret=pas&grant_type=authorization_code&redirect_uri=http://www.baidu.com&code=${code}
 ```
 #### 访问保护资源
 - access_token 为上一步返回的 access_token

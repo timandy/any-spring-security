@@ -1,4 +1,4 @@
-package com.spring4all.io;
+package com.bestvike.io;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

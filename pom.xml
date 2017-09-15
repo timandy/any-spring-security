@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.spring4all.anoy</groupId>
-    <artifactId>security-login-db</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.bestvike</groupId>
+    <artifactId>security-demo</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
-    <description>Spring Security 基础 DEMO （数据库版）- 来源于 SpringForAll 社区（http://spring4all.com）</description>
+    <description>Spring Security 基础 DEMO</description>
+
+    <modules>
+        <module>wesite</module>
+        <module>oauth-service</module>
+    </modules>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.0.M1</version>
     </parent>
+
 
     <dependencies>
         <dependency>
@@ -33,25 +40,15 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-data</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>2.0.2</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -80,5 +77,4 @@
             </snapshots>
         </repository>
     </repositories>
-
 </project>
