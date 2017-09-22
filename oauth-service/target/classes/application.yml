@@ -1,0 +1,28 @@
+server:
+  port: 8020
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.springframework.security: info
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5            # 心跳时间，即服务续约间隔时间 (缺省为30s)
+    lease-expiration-duration-in-seconds: 15        # 发呆时间，即服务续约到期时间 (缺省为90s)
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 6              # 拉取地址时间, 即间隔多长时间到服务端拉取最新的服务实例地址 (缺省为30s)
+    eureka-service-url-poll-interval-seconds: 60    # 拉取服务变更时间, 即客户端多长时间拉取服务端状态判定是否新增移除服务端 (缺省为300s)
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8080/user
+      prefer-token-info: false
+      filter-order: 3
